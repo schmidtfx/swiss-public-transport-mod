@@ -1,23 +1,22 @@
 """Support for transport.opendata.ch."""
 from __future__ import annotations
 
-from datetime import timedelta
-import logging
 import asyncio
+import logging
+from datetime import timedelta
 
-from opendata_transport import OpendataTransport, OpendataTransportStationboard
-from opendata_transport.exceptions import OpendataTransportError
+import homeassistant.helpers.config_validation as cv
+import homeassistant.util.dt as dt_util
 import voluptuous as vol
-
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
-from homeassistant.const import ATTR_ATTRIBUTION, CONF_NAME
+from homeassistant.const import ATTR_ATTRIBUTION, CONF_NAME, CONF_UNIQUE_ID
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
-from homeassistant.helpers.entity import Entity
-import homeassistant.util.dt as dt_util
+from opendata_transport import OpendataTransport, OpendataTransportStationboard
+from opendata_transport.exceptions import OpendataTransportError
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -54,6 +53,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_STATIONBOARD): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_LIMIT): cv.positive_int,
         vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
+        vol.Optional(CONF_UNIQUE_ID): cv.string,
     }
 )
 
